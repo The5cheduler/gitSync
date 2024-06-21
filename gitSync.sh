@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Developer: Pk Patel
 # Email: parthpatel9414+opensource@gmail.com
 # Date: 2021-09-25
