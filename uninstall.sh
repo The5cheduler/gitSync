@@ -3,10 +3,6 @@
 # Determine the user's shell profile
 if [ -n "$ZSH_VERSION" ]; then
   SHELL_PROFILE="$HOME/.zshrc"
-elif [ -n "$BASH_VERSION" ]; then
-  SHELL_PROFILE="$HOME/.bashrc"
-else
-  SHELL_PROFILE="$HOME/.profile"
 fi
 
 # Check if gitSync is installed
