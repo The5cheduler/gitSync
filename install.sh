@@ -1,18 +1,29 @@
+#!/bin/bash
 
-# Spinner
+# Advanced Spinner
 spinner() {
   local pid=$1
   local delay=0.1
-  local spinstr='|/-\'
+  local frames=(
+    "⠋"
+    "⠙"
+    "⠹"
+    "⠸"
+    "⠼"
+    "⠴"
+    "⠦"
+    "⠧"
+    "⠇"
+    "⠏"
+  )
   tput civis # Hide cursor
-  echo -n " "
-  while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-    for i in $(seq 0 3); do
-      printf "\b${spinstr:$i:1}"
-      sleep $delay
-    done
+  local frame_index=0
+  while kill -0 $pid 2>/dev/null; do
+    printf "\r${frames[frame_index]}"
+    frame_index=$(( (frame_index + 1) % ${#frames[@]} ))
+    sleep $delay
   done
-  printf "\b"
+  printf "\r"
   tput cnorm # Show cursor
 }
 
@@ -31,6 +42,6 @@ spinner $!
 echo 'export PATH="$HOME/.gitSync:$PATH"' >> $HOME/.bashrc
 
 # Source the shell profile to update the PATH in the current session
-source $HOME/.zshrc
+source $HOME/.bashrc
 
 echo "gitSync 🔧  has been installed successfully."
