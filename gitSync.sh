@@ -6,15 +6,26 @@
 # Version: 0.2.0
 # Description: gitSync: A shortcut for adding, committing, and pushing files to a git repository
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-MAGENTA='\033[0;35m'
-ORANGE='\033[0;33m'
-NC='\033[0m'
-VERSION="0.2.0"
+
+if [ "$TERM" != "dumb" ]; then
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  BLUE='\033[0;34m'
+  YELLOW='\033[1;33m'
+  CYAN='\033[0;36m'
+  MAGENTA='\033[0;35m'
+  ORANGE='\033[0;33m'
+  NC='\033[0m'
+else
+  RED=''
+  GREEN=''
+  BLUE=''
+  YELLOW=''
+  CYAN=''
+  MAGENTA=''
+  ORANGE=''
+  NC=''
+fi
 
 
 function intro() {
