@@ -3,7 +3,7 @@
 # Developer: Pk Patel
 # Email: parthpatel9414+opensource@gmail.com
 # Date: 2021-09-25
-# Version: 0.2.0
+# Version: 0.3.0
 # Description: gitSync: A shortcut for adding, committing, and pushing files to a git repository
 
 # Check if the terminal supports color
@@ -27,11 +27,11 @@ else
   NC=''
 fi
 
-VERSION="0.2.0"
+VERSION="0.3.0"
 
 function intro() {
   echo -e "${CYAN}version: $VERSION 🚀 ${NC}"
-  echo -e "${CYAN}gitSync 🔧 : A shortcut for adding, committing, and pushing files to a git repository${NC}"
+  echo -e "${CYAN}A shortcut for adding, committing, and pushing files to a git repository${NC}"
   echo -e "Developed by: ${GREEN}Pk Patel${NC} with ❤️  for the developer community."
 }
 
@@ -39,19 +39,19 @@ function help() {
   echo -e "Usage:"
   echo -e "${YELLOW}gitSync <command> [<args>]${NC}"
   echo -e "  ${GREEN}gitSync --version || -v${NC}                    🚀 Show the version of this script"
-  echo -e "     ${MAGENTA}example: gitSync --version${NC}"
+  echo -e "     ${MAGENTA}gitSync --version${NC}"
   echo -e "  ${GREEN}gitSync help || --help || -h || usage${NC}      🆘 Show usage information"
-  echo -e "     ${MAGENTA}example: gitSync help || gitSync --help || gitSync -h || gitSync usage${NC}"
+  echo -e "     ${MAGENTA}gitSync help || gitSync --help || gitSync -h || gitSync usage${NC}"
   echo -e "  ${GREEN}gitSync single <filename> <commit message>${NC}   📂 Add, commit, and push a single file"
-  echo -e "     ${MAGENTA}example: gitSync single index.html \"Initial commit\"${NC}"
+  echo -e "     ${MAGENTA}gitSync single index.html \"Initial commit\"${NC}"
   echo -e "  ${GREEN}gitSync multiple <commit message> <filename1> <filename2>...${NC}  📂 Add, commit, and push multiple files"
-  echo -e "     ${MAGENTA}example: gitSync multiple \"add index and about pages\" index.html about.html${NC}"
+  echo -e "     ${MAGENTA}gitSync multiple \"add index and about pages\" index.html about.html${NC}"
   echo -e "  ${GREEN}gitSync all <commit message>${NC}               📚 Add, commit, and push all files"
-  echo -e "     ${MAGENTA}example: gitSync all \"Initial commit\"${NC}"
+  echo -e "     ${MAGENTA}gitSync all \"Initial commit\"${NC}"
   echo -e "  ${GREEN}gitSync rebase <branch>${NC}                    🔄 Rebase and push the current branch"
-  echo -e "     ${MAGENTA}example: gitSync rebase main${NC}"
+  echo -e "     ${MAGENTA}gitSync rebase main${NC}"
   echo -e "  ${GREEN}gitSync update <branch>${NC}                    🔄 Update the current branch with the latest changes from remote/main"
-  echo -e "     ${MAGENTA}example: gitSync update feature-branch${NC}"
+  echo -e "     ${MAGENTA}gitSync update feature-branch${NC}"
   exit 1
 }
 
@@ -80,43 +80,32 @@ function version() {
 function rebase() {
   check_git || return 1
 
-  if [ -z "$1" ]; then
-    echo "Usage: gitSync rebase <branch>"
-    echo "example: gitSync rebase main"
-    exit 1
-  fi
+  branch=${1:-main}  # Default to 'main' if no branch is specified
 
   git fetch origin
-  git rebase origin/"$1"
-  git push
+  git rebase origin/"$branch" && git push || {
+    echo "Rebase or push failed. Please check your branch and conflicts."
+    return 1
+  }
 }
 
 function commit_single() {
   check_git || return 1
 
-  if [ -z "$1" ]; then
-    echo "Usage: gitSync single <filename> <commit message>"
-    echo "example: gitSync single index.html \"Initial commit\""
+  if [ -z "$1" ] || [ -z "$2" ]; then
     exit 1
   fi
 
-  if [ -z "$2" ]; then
-    echo "Usage: gitSync single <filename> <commit message>"
-    echo "example: gitSync single index.html \"Initial commit\""
+  git add "$1" && git commit -m "$2" && git push || {
+    echo "Error: Commit or push failed."
     exit 1
-  fi
-
-  git add "$1"
-  git commit -m "$2"
-  git push
+  }
 }
 
 function commit_multiple() {
   check_git || return 1
 
   if [ $# -lt 2 ]; then
-    echo "Usage: gitSync multiple <commit message> <filename1> <filename2>..."
-    echo "example: gitSync multiple \"add index and about pages\" index.html about.html"
     exit 1
   fi
 
@@ -135,8 +124,6 @@ function commit_all() {
   check_git || return 1
 
   if [ -z "$1" ]; then
-    echo "Usage: gitSync all <commit message>"
-    echo "example: gitSync all \"Initial commit\""
     exit 1
   fi
 
@@ -152,8 +139,6 @@ function update() {
   check_git || return 1
 
   if [ -z "$1" ]; then
-    echo "Usage: gitSync update <branch>"
-    echo "example: gitSync update feature-branch"
     exit 1
   fi
 
