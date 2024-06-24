@@ -1,0 +1,14 @@
+{
+    "name": "Your Environment",
+    "build": {
+      "dockerfile": "Dockerfile",
+      "args": {
+        "VARIANT": "11",
+        "INSTALL_NODE": "true"
+      }
+    },
+    "settings": {},
+    "extensions": [],
+    "postCreateCommand": "./setup-scripts/install-custom-scripts.sh",
+    "remoteUser": "vscode"
+  }
